@@ -14,7 +14,213 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      grades: {
+        Row: {
+          created_at: string
+          id: string
+          level: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      marketplace_items: {
+        Row: {
+          category: string
+          condition: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_available: boolean | null
+          location: string | null
+          price: number
+          seller_id: string
+          title: string
+          updated_at: string
+          views: number | null
+        }
+        Insert: {
+          category: string
+          condition?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_available?: boolean | null
+          location?: string | null
+          price?: number
+          seller_id: string
+          title: string
+          updated_at?: string
+          views?: number | null
+        }
+        Update: {
+          category?: string
+          condition?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_available?: boolean | null
+          location?: string | null
+          price?: number
+          seller_id?: string
+          title?: string
+          updated_at?: string
+          views?: number | null
+        }
+        Relationships: []
+      }
+      notes: {
+        Row: {
+          author_id: string
+          content: string | null
+          created_at: string
+          description: string | null
+          downloads: number | null
+          file_size: number | null
+          file_type: string | null
+          file_url: string | null
+          grade_id: string | null
+          id: string
+          is_premium: boolean | null
+          price: number | null
+          rating: number | null
+          subject_id: string | null
+          tags: string[] | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          downloads?: number | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          grade_id?: string | null
+          id?: string
+          is_premium?: boolean | null
+          price?: number | null
+          rating?: number | null
+          subject_id?: string | null
+          tags?: string[] | null
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          downloads?: number | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          grade_id?: string | null
+          id?: string
+          is_premium?: boolean | null
+          price?: number | null
+          rating?: number | null
+          subject_id?: string | null
+          tags?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_grade_id_fkey"
+            columns: ["grade_id"]
+            isOneToOne: false
+            referencedRelation: "grades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notes_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          full_name: string
+          grade: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          school: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name: string
+          grade?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          school?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string
+          grade?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          school?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subjects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +229,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: "student" | "teacher" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +356,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["student", "teacher", "admin"],
+    },
   },
 } as const
