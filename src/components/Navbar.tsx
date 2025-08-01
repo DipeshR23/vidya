@@ -1,10 +1,24 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, BookOpen, Upload, Store, User } from "lucide-react";
+import { Menu, X, BookOpen, Upload, Store, User, LogOut, Bell, Search } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
   const location = useLocation();
 
   const navigation = [
@@ -51,18 +65,37 @@ const Navbar = () => {
           </div>
 
           {/* Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login">
-              <Button variant="ghost" size="sm">
-                Login
+          <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="sm">
+              <Search className="h-4 w-4" />
+            </Button>
+            {user ? (
+              <>
+                <Button variant="ghost" size="sm">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <User className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard">Dashboard</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <Button asChild variant="outline" size="sm">
+                <Link to="/login">Sign In</Link>
               </Button>
-            </Link>
-            <Link to="/dashboard">
-              <Button variant="default" size="sm">
-                <User className="w-4 h-4 mr-2" />
-                Dashboard
-              </Button>
-            </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
